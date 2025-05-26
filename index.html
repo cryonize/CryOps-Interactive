@@ -1,0 +1,204 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryOps Interactive - Game Industry Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <!-- Header -->
+  <header class="bg-indigo-600 py-6 text-center">
+    <h1 class="text-4xl font-bold">CryOps Interactive</h1>
+    <p class="text-lg mt-2">Your Expert Team for Live Service Games in the Global Market</p>
+    <p class="text-sm mt-1">Taguig City, PH | johnvincentlot@gmail.com | (+63) 915-528-2385</p>
+  </header>
+
+  <!-- About Section -->
+  <section class="max-w-4xl mx-auto py-10 px-4">
+    <h2 class="text-3xl font-semibold mb-4">About Our Team</h2>
+    <p class="text-lg">
+      CryOps Interactive is a powerhouse team of three game industry veterans with over 30 years of combined experience. We specialize in live service game operations, quality assurance, player support, social media, Discord ecosystems, game design, and project management. Having worked on global titles like <em>Riders of Icarus</em> and innovative indie projects like <em>Climate Guardians Defenders</em>, we adapt to the fast-evolving trends of the global game industry, delivering engaging player experiences and operational excellence. Our team was further trained in Korea by industry experts, growing to become leading experts in our company upon returning to the Philippines.
+    </p>
+  </section>
+
+  <!-- Services Section -->
+  <section class="bg-gray-800 py-10">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-semibold mb-6">Our Services</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-xl font-bold">Live Service Game Operations</h3>
+          <ul class="list-disc list-inside">
+            <li>KPI monitoring and reporting</li>
+            <li>In-game sales and package conceptualization</li>
+            <li>Player feedback analysis and improvement planning</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold">Quality Assurance</h3>
+          <ul class="list-disc list-inside">
+            <li>Testing game updates in staging and production</li>
+            <li>Bug identification and developer coordination</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold">Game Support</h3>
+          <ul class="list-disc list-inside">
+            <li>Ticket and email support (Zendesk)</li>
+            <li>Identifying and resolving player pain points</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold">Social Media & Discord Management</h3>
+          <ul class="list-disc list-inside">
+            <li>Global social media campaigns (Twitter, Instagram)</li>
+            <li>Discord server setup and community engagement</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold">Game Design</h3>
+          <ul class="list-disc list-inside">
+            <li>Game mechanics, balance, and economics</li>
+            <li>Prototyping in Unity and Godot</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold">Project Management</h3>
+          <ul class="list-disc list-inside">
+            <li>Agile/Scrum coordination (Jira, Trello)</li>
+            <li>Team leadership and milestone delivery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="max-w-4xl mx-auto py-10 px-4">
+    <h2 class="text-3xl font-semibold mb-6">Our Team</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-gray-700 p-6 rounded-lg text-center">
+        <h3 class="text-xl font-bold">Live Ops & Community Lead</h3>
+        <p>Oversees live service operations, Discord ecosystems, and social media strategies, ensuring player engagement and robust community growth.</p>
+      </div>
+      <div class="bg-gray-700 p-6 rounded-lg text-center">
+        <h3 class="text-xl font-bold">QA & Support Specialist</h3>
+        <p>Manages quality assurance and player support, excelling at identifying bugs and resolving player issues to enhance game quality.</p>
+      </div>
+      <div class="bg-gray-700 p-6 rounded-lg text-center">
+        <h3 class="text-xl font-bold">Game Design & Project Manager</h3>
+        <p>Leads game design and project coordination, crafting innovative mechanics and managing teams to deliver on time and budget.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="max-w-4xl mx-auto py-10 px-4">
+    <h2 class="text-3xl font-semibold mb-6">Our Work</h2>
+    <div class="space-y-8">
+      <!-- Project 1 -->
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-2xl font-bold">Riders of Icarus</h3>
+        <p class="text-sm text-gray-300 mb-2">MMORPG | Role: Live Ops, Game Design, QA, Support | 2019-2022</p>
+        <p>
+          Managed live operations, game design, quality assurance, and player support for a global MMORPG, releasing across Thailand, Russia, India, and Latin America. Both player retention and revenue improved upwards of 80% during COVID. Monitored KPIs and implemented events, though the game closed in May 2025.
+        </p>
+      </div>
+      <!-- Project 2 -->
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-2xl font-bold">Combat Arms</h3>
+        <p class="text-sm text-gray-300 mb-2">FPS | Role: Live Ops, Game Design, QA, Support | 2018-2022</p>
+        <p>
+          Oversaw live operations, game design, quality assurance, and player support for a global FPS. Managed account migrations between publishers and ported to Steam, boosting players. Made a seamless transition from the previous publisher to the next without too much of an issue on the player’s side. Provided consistent support to players over time.
+        </p>
+      </div>
+      <!-- Project 3 -->
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-2xl font-bold">Atlantica Online</h3>
+        <p class="text-sm text-gray-300 mb-2">MMORPG | Role: Live Ops, Game Design, QA, Support | 2016-2022</p>
+        <p>
+          Handled live operations, game design, quality assurance, and player support for a turn-based MMORPG. Managed account migrations and Steam porting, increasing player access. Created a novel resolution to in-game economy issues and introduced various non-predatory monetization strategies.
+        </p>
+      </div>
+      <!-- Project 4 -->
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-2xl font-bold">Climate Guardians Defenders</h3>
+        <p class="text-sm text-gray-300 mb-2">Mobile Strategy Game | Role: Game Design & Project Management | 2022-2023</p>
+        <p>
+          Led a dedicated five-person team to design a mobile strategy game blending <em>Clash of Clans</em> and <em>Clash Royale</em> mechanics, focused on reclaiming Amazon lands. Worked tirelessly to create a rough prototype, crafting the GDD, balancing game economics, and coordinating design, programming, and art efforts.
+        </p>
+      </div>
+      <!-- Project 5 -->
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-2xl font-bold">Confidential Project #1</h3>
+        <p class="text-sm text-gray-300 mb-2">Online Table-Top Game | Role: Game Design, Project Management | 2024</p>
+        <p>
+          Developed a digitized <em>Betrayal at House on the Hill</em> for global online play, pending release. Designed dynamic matchmaking and turn-based horror with PvE-to-PvP mechanics. Managed project coordination to deliver a prototype, ensuring faithful adaptation of the table-top game’s suspenseful gameplay.
+        </p>
+      </div>
+      <!-- Project 6 -->
+      <div class="bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-2xl font-bold">Confidential Project #2</h3>
+        <p class="text-sm text-gray-300 mb-2">Simulation-Adventure Game | Role: Game Design, Project Management | 2024</p>
+        <p>
+          Designed a simulation-adventure game with farming, exploration, and turn-based combat in a low-poly isometric 2D/3D environment, pending release. Led design and project management to deliver a prototype, focusing on engaging mechanics and immersive storytelling for a global audience.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="max-w-4xl mx-auto py-10 px-4 text-center">
+    <h2 class="text-3xl font-semibold mb-6">Work With Us</h2>
+    <p class="text-lg mb-4">
+      CryOps Interactive is ready to elevate your live service game in the global market. From operations to community management, we deliver results. Contact us to discuss your project!
+    </p>
+    <a href="mailto:johnvincentlot@gmail.com" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">Contact Us</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 py-4 text-center text-gray-400">
+    <p>© 2025 CryOps Interactive. All rights reserved.</p>
+  </footer>
+</body>
+</html>
